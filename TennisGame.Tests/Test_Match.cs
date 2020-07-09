@@ -96,6 +96,36 @@ namespace TestGame.Tests
             Assert.Equal("1-0", score);
         }
 
+        [Fact]
+        public void Score_BothPlayersWin_MultipleGames()
+        {
+            var match = new Match(playerName1, playerName2);
+            PlayerWinsGames(3, match, playerName1);
+            var score = match.score();
+            Assert.Equal("3-0", score);
+
+            PlayerWinsGames(3, match, playerName2);
+            score = match.score();
+            Assert.Equal("3-3", score);
+        }
+
+        [Fact]
+        public void Score_PlayerMustWins_ByTwoGames()
+        {
+            var match = new Match(playerName1, playerName2);
+            PlayerWinsGames(5, match, playerName1);
+            var score = match.score();
+            Assert.Equal("5-0", score);
+
+            PlayerWinsGames(6, match, playerName2);
+            score = match.score();
+            Assert.Equal("5-6", score);
+
+            PlayerWinsGames(1, match, playerName2);
+            score = match.score();
+            Assert.Equal(string.Format("Match won by: {0}", playerName2), score);
+        }
+
         
         [Fact]
         public void Score_Player1_WinsSet_and_Match()
