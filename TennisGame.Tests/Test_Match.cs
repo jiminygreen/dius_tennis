@@ -110,5 +110,14 @@ namespace TestGame.Tests
             score = match.score();
             Assert.Equal(string.Format("Match won by: {0}", playerName1), score);
         }
+
+        [Fact]
+        public void DidPlayerWinMatch_Player1_WinsSet_and_Match()
+        {
+            var match = new Match(playerName1, playerName2);
+            PlayerWinsGames(6, match, playerName1);
+            
+            Assert.True(match.DidPlayerWinMatch(playerName1));
+        }
     }
 }

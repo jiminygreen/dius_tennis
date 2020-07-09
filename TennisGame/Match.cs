@@ -41,6 +41,7 @@ namespace TennisGame
             }
         }
 
+        // Display the score to the caller
         public string score()
         {
             Player matchWinner = _matchScoreCalculator.ChooseWinner(_player1, _player2);
