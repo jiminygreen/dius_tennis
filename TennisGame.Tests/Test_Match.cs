@@ -63,7 +63,22 @@ namespace TestGame.Tests
             Assert.Equal("0-0, Deuce", score);
         }
 
-        
+        public void PlayerWinsGame(Match match, string playerName)
+        {
+            match.pointWonBy(playerName); // 15
+            match.pointWonBy(playerName); // 30
+            match.pointWonBy(playerName); // 40
+            match.pointWonBy(playerName); // Won
+        }
+
+        public void PlayerWinsGames(int gameNumber, Match match, string playerName)
+        {
+            for(int i = 0; i < gameNumber; i++)
+            {
+                PlayerWinsGame(match, playerName);
+            }
+        }
+
         [Fact]
         public void Score_ZeroSets_Advantage_and_GameWin_Player1()
         {
@@ -79,6 +94,21 @@ namespace TestGame.Tests
             match.pointWonBy(playerName1);
             score = match.score();
             Assert.Equal("1-0", score);
+        }
+
+        
+        [Fact]
+        public void Score_Player1_WinsSet_and_Match()
+        {
+            var match = new Match(playerName1, playerName2);
+            PlayerWinsGames(5, match, playerName1);
+            var score = match.score();
+            Assert.Equal("5-0", score);
+
+            
+            PlayerWinsGames(1, match, playerName1);
+            score = match.score();
+            Assert.Equal(string.Format("Match won by: {0}", playerName1), score);
         }
     }
 }

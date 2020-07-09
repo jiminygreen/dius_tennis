@@ -9,6 +9,7 @@ namespace TennisGame
 
         private SetScoreCalculator _setScoreCalculator;
         private GameScoreCalculator _gameScoreCalculator;
+        private MatchScoreCalculator _matchScoreCalculator;
 
         public Match(string playerName1, string playerName2)
         {
@@ -17,6 +18,7 @@ namespace TennisGame
 
             _setScoreCalculator = new SetScoreCalculator();
             _gameScoreCalculator = new GameScoreCalculator();
+            _matchScoreCalculator = new MatchScoreCalculator();
         }
 
         public void pointWonBy(string playerName)
@@ -28,7 +30,7 @@ namespace TennisGame
             // add one to there score
             player.GameScore.WonPoint();
 
-            var player_GameWinner = new GameScoreCalculator().ChooseWinner(_player1, _player2);
+            var player_GameWinner = _gameScoreCalculator.ChooseWinner(_player1, _player2);
 
             // If not null then the game was won. Increament the game count in the Set
             if (null != player_GameWinner)
@@ -41,17 +43,32 @@ namespace TennisGame
 
         public string score()
         {
-            var hasGameScoreToDisplay  = new GameScoreCalculator().HasScoreToDisplay(_player1.GameScore, _player2.GameScore);
+            Player matchWinner = _matchScoreCalculator.ChooseWinner(_player1, _player2);
+            if (null != matchWinner)
+            {
+                return string.Format("Match won by: {0}", matchWinner.Name);
+            }
 
-            if(hasGameScoreToDisplay)
+            var hasGameScoreToDisplay = new GameScoreCalculator().HasScoreToDisplay(_player1.GameScore, _player2.GameScore);
+            if (hasGameScoreToDisplay)
             {
                 return string.Format("{0}, {1}",
                  _setScoreCalculator.ScoreDisplay(_player1.SetScore, _player2.SetScore),
                  _gameScoreCalculator.ScoreDisplay(_player1.GameScore, _player2.GameScore)
                 );
             }
-    
-            return new SetScoreCalculator().ScoreDisplay(_player1.SetScore, _player2.SetScore);
+
+            return _setScoreCalculator.ScoreDisplay(_player1.SetScore, _player2.SetScore);
+
+        }
+
+        // Return 
+        public bool DidPlayerWinMatch(string playerName)
+        {
+            var player = getPlayer(playerName);
+            var winner = _matchScoreCalculator.ChooseWinner(_player1, _player2);
+
+            return (winner.Name == player.Name);
         }
 
         private Player getPlayer(string playerName)
@@ -62,12 +79,4 @@ namespace TennisGame
             return this._player2;
         }
     }
-
-    // public class GameScoreDisplay
-    // {
-    //     public string Score(PlayerGameScore gameScore1, PlayerGameScore gameScore2)
-    //     {
-    //         return string.Format("{0}-{1}", gameScore1.GamePointsAsString(), gameScore2.GamePointsAsString());
-    //     }
-    // }
 }
