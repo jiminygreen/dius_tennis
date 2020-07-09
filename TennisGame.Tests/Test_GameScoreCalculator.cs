@@ -9,7 +9,7 @@ namespace TestGame.Tests
         readonly string playerName1 = "Boris Becker 1";
         readonly string playerName2 = "Andy Murry 2";
 
-        private void SetupGameAtDeuce(PlayerGameScore gameScore1, PlayerGameScore gameScore2)
+        private void SetupGameAtDeuce(IPlayerGameScore gameScore1, IPlayerGameScore gameScore2)
         {
             // player 1 wins three points
             gameScore1.WonPoint(); // 15

@@ -2,23 +2,28 @@ using System;
 
 namespace TennisGame
 {
+    public interface IMatchScoreCalculator
+    {       
+        IPlayer ChooseWinner(IPlayer player1, IPlayer player2);
 
-    public class MatchScoreCalculator
+    }
+
+    public class MatchScoreCalculator : IMatchScoreCalculator
     {
 
-        private bool DidWinFirstSlot(Player player1, Player player2)
+        private bool DidWinFirstSlot(IPlayer player1, IPlayer player2)
         {
             return (player1.SetScore.Games >= 6 && (Math.Abs(player1.SetScore.Games - player2.SetScore.Games) >= 2)) ? true : false;
         }
 
         // return the winner of the match. If niether player has won, return null.
-        public Player ChooseWinner(Player player1, Player player2)
+        public IPlayer ChooseWinner(IPlayer player1, IPlayer player2)
         {
             // Six games to win a match
-            if (player1.SetScore.Games >= 6)
+            if (DidWinFirstSlot(player1, player2))
                 return player1;
 
-            if (player2.SetScore.Games >= 6)
+            if (DidWinFirstSlot(player2, player1))
                 return player2;
 
             return null;

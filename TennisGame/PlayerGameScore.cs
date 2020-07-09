@@ -1,14 +1,29 @@
 namespace TennisGame
 {
+    public interface IPlayerGameScore
+    {
+        int Points {get;}
+
+        IPlayer Player { get; }
+
+        void WonPoint();
+
+        void Reset();
+
+        string PointsAsString();
+
+
+    }
+
     /// This class is in charge of the game score for an individual player. 
     // It knows the number of points scored and can convert a point (number to a display i.e. 40)
-    public class PlayerGameScore
+    public class PlayerGameScore : IPlayerGameScore
     {
         public int Points { get { return _points; } }
         int _points = 0;
 
-        public Player Player { get; }
-        public PlayerGameScore(Player player)
+        public IPlayer Player { get; }
+        public PlayerGameScore(IPlayer player)
         {
             Player = player;
         }

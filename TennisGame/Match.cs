@@ -4,12 +4,12 @@ namespace TennisGame
 {
     public class Match
     {
-        Player _player1;
-        Player _player2;
+        IPlayer _player1;
+        IPlayer _player2;
 
-        private SetScoreCalculator _setScoreCalculator;
-        private GameScoreCalculator _gameScoreCalculator;
-        private MatchScoreCalculator _matchScoreCalculator;
+        private ISetScoreCalculator _setScoreCalculator;
+        private IGameScoreCalculator _gameScoreCalculator;
+        private IMatchScoreCalculator _matchScoreCalculator;
 
         public Match(string playerName1, string playerName2)
         {
@@ -44,7 +44,7 @@ namespace TennisGame
         // Display the score to the caller
         public string score()
         {
-            Player matchWinner = _matchScoreCalculator.ChooseWinner(_player1, _player2);
+            var matchWinner = _matchScoreCalculator.ChooseWinner(_player1, _player2);
             if (null != matchWinner)
             {
                 return string.Format("Match won by: {0}", matchWinner.Name);
@@ -72,7 +72,7 @@ namespace TennisGame
             return (winner.Name == player.Name);
         }
 
-        private Player getPlayer(string playerName)
+        private IPlayer getPlayer(string playerName)
         {
             if (this._player1.Name == playerName)
                 return this._player1;

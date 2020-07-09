@@ -2,17 +2,26 @@ using System;
 
 namespace TennisGame
 {
+    interface IGameScoreCalculator
+    {
+        IPlayer ChooseWinner(IPlayer player1, IPlayer player2);
 
-    public class GameScoreCalculator
+        bool HasScoreToDisplay(IPlayerGameScore gameScore1, IPlayerGameScore gameScore2);
+
+        string ScoreDisplay(IPlayerGameScore gameScore1, IPlayerGameScore gameScore2);
+
+    }
+ 
+    public class GameScoreCalculator : IGameScoreCalculator
     {
 
-        private bool DidWinFirstSlot(PlayerGameScore gameScore1, PlayerGameScore gameScore2)
+        private bool DidWinFirstSlot(IPlayerGameScore gameScore1, IPlayerGameScore gameScore2)
         {
             return (gameScore1.Points > 3 && (Math.Abs(gameScore1.Points - gameScore2.Points) >= 2)) ? true : false;
         }
 
         //Work out if someone one the game. If someone did. Return that winner. If no one won, return null
-        public Player ChooseWinner(Player player1, Player player2)
+        public IPlayer ChooseWinner(IPlayer player1, IPlayer player2)
         {
             // Check if the first player won
             if (DidWinFirstSlot(player1.GameScore, player2.GameScore))
@@ -25,12 +34,12 @@ namespace TennisGame
             return null;
         }
 
-        public bool HasScoreToDisplay(PlayerGameScore gameScore1, PlayerGameScore gameScore2)
+        public bool HasScoreToDisplay(IPlayerGameScore gameScore1, IPlayerGameScore gameScore2)
         {
             return (gameScore1.Points > 0 || gameScore2.Points > 0);
         }
 
-        public string ScoreDisplay(PlayerGameScore gameScore1, PlayerGameScore gameScore2)
+        public string ScoreDisplay(IPlayerGameScore gameScore1, IPlayerGameScore gameScore2)
         {
             // 1 point = 15
             // 2 point = 30

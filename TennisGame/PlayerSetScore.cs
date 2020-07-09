@@ -1,12 +1,21 @@
 namespace TennisGame
 {
-    public class PlayerSetScore
+    public interface  IPlayerSetScore
+    {
+        int Games { get; }
+        IPlayer Player { get; }
+        void WonGame();
+        string GamesAsString();
+
+    }
+
+    public class PlayerSetScore : IPlayerSetScore
     {
         public int Games { get { return _games; } }
         int _games = 0;
 
-        public Player Player { get; }
-        public PlayerSetScore(Player player)
+        public IPlayer Player { get; }
+        public PlayerSetScore(IPlayer player)
         {
             Player = player;
         }
