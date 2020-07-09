@@ -3,6 +3,7 @@ namespace TennisGame
     public interface IPlayerGameScore
     {
         int Points {get;}
+        bool NoPoints {get;}
 
         IPlayer Player { get; }
 
@@ -21,6 +22,8 @@ namespace TennisGame
     {
         public int Points { get { return _points; } }
         int _points = 0;
+
+        public bool NoPoints { get { return _points == 0; } }
 
         public IPlayer Player { get; }
         public PlayerGameScore(IPlayer player)

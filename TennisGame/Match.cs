@@ -25,19 +25,26 @@ namespace TennisGame
         {
             // find the player
             var player = getPlayer(playerName);
-            //var loserGameScore = getGameScoreForLoser(playerName);
 
-            // add one to there score
+            // add one to their score
             player.GameScore.WonPoint();
 
+            // has someone won. Oh the excitment?
             var player_GameWinner = _gameScoreCalculator.ChooseWinner(_player1, _player2);
 
             // If not null then the game was won. Increament the game count in the Set
             if (null != player_GameWinner)
             {
+                _gameScoreCalculator = new GameScoreCalculator();
                 _player1.GameScore.Reset();
                 _player2.GameScore.Reset();
                 player.SetScore.WonGame();
+            }
+
+            if( hasSetMovedToTieBreak())
+            {
+                _gameScoreCalculator = new SetGameTieBreakScoreCalculator();
+                _matchScoreCalculator = new MatchTieBreakerScoreCalculator();
             }
         }
 
@@ -50,7 +57,7 @@ namespace TennisGame
                 return string.Format("Match won by: {0}", matchWinner.Name);
             }
 
-            var hasGameScoreToDisplay = new GameScoreCalculator().HasScoreToDisplay(_player1.GameScore, _player2.GameScore);
+            var hasGameScoreToDisplay = _gameScoreCalculator.HasScoreToDisplay(_player1.GameScore, _player2.GameScore);
             if (hasGameScoreToDisplay)
             {
                 return string.Format("{0}, {1}",
@@ -69,7 +76,7 @@ namespace TennisGame
             var player = getPlayer(playerName);
             var winner = _matchScoreCalculator.ChooseWinner(_player1, _player2);
 
-            return (winner.Name == player.Name);
+            return (winner != null && winner.Name == player.Name);
         }
 
         private IPlayer getPlayer(string playerName)
@@ -78,6 +85,12 @@ namespace TennisGame
                 return this._player1;
 
             return this._player2;
+        }
+
+        private bool hasSetMovedToTieBreak()
+        {
+            return (_player1.SetScore.Games >= 6 && _player2.SetScore.Games >= 6 );
+            //&& _player1.GameScore.NoPoints && _player1.GameScore.NoPoints);
         }
     }
 }

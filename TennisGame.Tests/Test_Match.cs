@@ -149,5 +149,42 @@ namespace TestGame.Tests
             
             Assert.True(match.DidPlayerWinMatch(playerName1));
         }
+
+        [Fact]
+        public void DidPlayerWinMatch_NoOneHasWonMatchYet()
+        {
+            var match = new Match(playerName1, playerName2);
+            PlayerWinsGames(5, match, playerName1);
+            
+            Assert.False(match.DidPlayerWinMatch(playerName1));
+        }
+
+        [Fact]
+        public void Score_GameTieBreak()
+        {
+            var match = new Match(playerName1, playerName2);
+            PlayerWinsGames(6, match, playerName1);
+            PlayerWinsGames(6, match, playerName2);
+
+
+            var score = match.score();
+            Assert.Equal("6-6", score);
+            Assert.False(match.DidPlayerWinMatch(playerName1));
+
+            match.pointWonBy(playerName2); // 0-1
+            match.pointWonBy(playerName2); // 0-2
+            match.pointWonBy(playerName2); // 0-3
+            match.pointWonBy(playerName1); // 1-3
+            score = match.score();
+            Assert.Equal("6-6, 1-3", score);
+            match.pointWonBy(playerName2); // 1-4
+            match.pointWonBy(playerName2); // 1-5
+            match.pointWonBy(playerName2); // 1-6 - Match won by player2
+            
+            score = match.score();
+            Assert.Equal("Match won by: player 2", score);
+            Assert.True(match.DidPlayerWinMatch(playerName2));
+        }
+
     }
 }

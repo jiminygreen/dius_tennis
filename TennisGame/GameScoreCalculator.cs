@@ -17,6 +17,7 @@ namespace TennisGame
 
         private bool DidWinFirstSlot(IPlayerGameScore gameScore1, IPlayerGameScore gameScore2)
         {
+            // More than 3 points translates to above 40. So you can win if you have 2 more points than the other player
             return (gameScore1.Points > 3 && (Math.Abs(gameScore1.Points - gameScore2.Points) >= 2)) ? true : false;
         }
 
